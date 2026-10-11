@@ -17,7 +17,7 @@ Keep the UI layer as thin as possible. Business logic belongs in inner layers.
 | Domain | Entities, value objects, domain rules (e.g. `Application`, `SearchQuery`, matching rules) | Nothing |
 | Application | Use cases and service interfaces (e.g. search apps, launch app, handle hotkey request) | Domain |
 | Infrastructure | Repositories and platform adapters (app discovery, process start, global hotkey registration per OS) | Application, Domain |
-| Presentation (UI) | Avalonia views, view models that only map user input to use cases and expose state | Application |
+| `FlashBar.UI` | Avalonia views, view models that only map user input to use cases and expose state | Application |
 
 Rules:
 - Views contain no business logic. Code-behind only handles UI-specific wiring.
@@ -32,7 +32,7 @@ src/
   FlashBar.Domain/
   FlashBar.Application/
   FlashBar.Infrastructure/
-  FlashBar.Presentation/   (Avalonia UI)
+  FlashBar.UI/             (Avalonia UI)
   FlashBar.Desktop/        (entry point, composition root)
   FlashBar.Tests/
 ```

@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:FlashBar.UI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="FlashBar.UI.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="FlashBar"
+        Width="640"
+        Height="190"
+        MinWidth="480"
+        MinHeight="170"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <StackPanel Margin="28" Spacing="16" VerticalAlignment="Center">
+        <StackPanel Spacing="4">
+            <TextBlock Text="FlashBar" FontSize="22" FontWeight="SemiBold" />
+            <TextBlock Text="Find an application to launch" Opacity="0.7" />
+        </StackPanel>
+
+        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                 PlaceholderText="Search applications..."
+                 FontSize="18"
+                 Padding="14,12" />
+    </StackPanel>
+
+</Window>
