@@ -8,9 +8,8 @@
         x:DataType="vm:MainViewModel"
         Title="FlashBar"
         Width="640"
-        Height="190"
+        SizeToContent="Height"
         MinWidth="480"
-        MinHeight="170"
         Background="Transparent"
         TransparencyLevelHint="Transparent"
         WindowDecorations="None"
@@ -20,9 +19,15 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Enter" Command="{Binding LaunchSelectedCommand}" />
+        <KeyBinding Gesture="Down" Command="{Binding SelectNextCommand}" />
+        <KeyBinding Gesture="Up" Command="{Binding SelectPreviousCommand}" />
+    </Window.KeyBindings>
+
     <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
             CornerRadius="8">
-        <StackPanel Margin="28" Spacing="16" VerticalAlignment="Center">
+        <StackPanel Margin="28" Spacing="16">
             <StackPanel Spacing="4">
                 <TextBlock Text="FlashBar" FontSize="18" FontWeight="SemiBold" />
             </StackPanel>
@@ -30,6 +35,37 @@
                      PlaceholderText="Search applications..."
                      FontSize="18"
                      Padding="14,12" />
+            <ListBox ItemsSource="{Binding Applications}"
+                     SelectedItem="{Binding SelectedApplication}"
+                     IsVisible="{Binding HasApplications}"
+                     MaxHeight="360"
+                     DoubleTapped="OnApplicationDoubleTapped">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ApplicationItemViewModel">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Grid Width="32" Height="32">
+                                <Image Source="{Binding Icon}"
+                                       IsVisible="{Binding HasIcon}" />
+                                <Border IsVisible="{Binding !HasIcon}"
+                                        Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                        CornerRadius="4">
+                                    <TextBlock Text="{Binding Initial}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontWeight="SemiBold" />
+                                </Border>
+                            </Grid>
+                            <TextBlock Text="{Binding Name}"
+                                       VerticalAlignment="Center"
+                                       FontSize="16" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock Text="{Binding StatusMessage}"
+                       IsVisible="{Binding HasStatus}"
+                       Foreground="IndianRed"
+                       TextWrapping="Wrap" />
         </StackPanel>
     </Border>
 

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <None Include="apps.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
