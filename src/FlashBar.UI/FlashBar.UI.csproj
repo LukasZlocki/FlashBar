@@ -22,4 +22,9 @@
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlashBar.Service\FlashBar.Service.csproj" />
+    <ProjectReference Include="..\FlashBar.Infrastructure\FlashBar.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>

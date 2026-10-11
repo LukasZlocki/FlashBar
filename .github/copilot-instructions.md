@@ -15,25 +15,26 @@ Keep the UI layer as thin as possible. Business logic belongs in inner layers.
 | Layer | Responsibility | Depends on |
 |---|---|---|
 | Domain | Entities, value objects, domain rules (e.g. `Application`, `SearchQuery`, matching rules) | Nothing |
-| Application | Use cases and service interfaces (e.g. search apps, launch app, handle hotkey request) | Domain |
-| Infrastructure | Repositories and platform adapters (app discovery, process start, global hotkey registration per OS) | Application, Domain |
-| `FlashBar.UI` | Avalonia views, view models that only map user input to use cases and expose state | Application |
+| Repository | Repository contracts over domain types | Domain |
+| Service | Application use cases (e.g. search apps, launch app, handle hotkey request) | Domain, Repository |
+| Infrastructure | Repository implementations and platform adapters (app discovery, process start, global hotkey registration per OS) | Domain, Repository |
+| `FlashBar.UI` | Avalonia views, view models, entry point, and composition root | Service, Infrastructure |
 
 Rules:
 - Views contain no business logic. Code-behind only handles UI-specific wiring.
 - View models call use cases through interfaces; they do not call OS APIs directly.
-- Domain and Application must not reference Avalonia or platform APIs.
-- Platform-specific code (Windows hotkey, Linux hotkey, process launching) lives in Infrastructure behind interfaces defined in Application.
+- Domain, Repository, and Service must not reference Avalonia or platform APIs.
+- Repository contracts are defined in `FlashBar.Repository`; their implementations and platform-specific code live in Infrastructure.
 - Composition root (dependency injection setup) lives in the entry project only.
 
 ## Suggested Solution Layout
 ```
 src/
   FlashBar.Domain/
-  FlashBar.Application/
+  FlashBar.Repository/
+  FlashBar.Service/
   FlashBar.Infrastructure/
-  FlashBar.UI/             (Avalonia UI)
-  FlashBar.Desktop/        (entry point, composition root)
+  FlashBar.UI/             (Avalonia UI, entry point, composition root)
   FlashBar.Tests/
 ```
 
@@ -48,13 +49,13 @@ src/
 - Use nullable reference types and treat warnings as errors where practical.
 - Use `async`/`await` for I/O such as app discovery and process launch.
 - Keep public APIs of each layer small and interface-based.
-- Write unit tests for Domain and Application logic without UI or OS dependencies.
+- Write unit tests for Domain and Service logic without UI or OS dependencies.
 - Do not add comments that restate code. Comment only what code cannot express.
 
 ## Working Rules for Agents
 - Make incremental changes; keep each change buildable.
 - Confirm the build and AOT publish still succeed after structural changes.
-- Do not add dependencies to the Domain or Application layers beyond the base library.
+- Do not add dependencies to the Domain, Repository, or Service layers beyond project references and the base library.
 - Do not create extra documentation files unless requested.
 - Update `.github/copilot-instructions.md` when architecture decisions change.
 

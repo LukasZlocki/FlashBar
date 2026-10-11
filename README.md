@@ -17,10 +17,10 @@ FlashBar is a lightweight desktop launcher for Windows and Linux. Press `Win + S
 FlashBar follows Clean Architecture to keep the UI layer thin:
 
 - `FlashBar.Domain`: entities, value objects, and matching rules
-- `FlashBar.Application`: use cases and service interfaces
-- `FlashBar.Infrastructure`: application discovery, process launching, and platform-specific hotkey registration
-- `FlashBar.UI`: Avalonia views and view models
-- `FlashBar.Desktop`: entry point and composition root
+- `FlashBar.Repository`: repository contracts over domain types
+- `FlashBar.Service`: application use cases that use repository contracts
+- `FlashBar.Infrastructure`: repository implementations, application discovery, process launching, and platform-specific hotkey registration
+- `FlashBar.UI`: Avalonia views, view models, and desktop entry point; composition root belongs here
 
 ## Status
 Early development. See [.github/copilot-instructions.md](.github/copilot-instructions.md) for the project guide and open questions.
