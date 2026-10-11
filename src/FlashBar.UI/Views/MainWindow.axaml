@@ -11,22 +11,26 @@
         Height="190"
         MinWidth="480"
         MinHeight="170"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        WindowDecorations="None"
         WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <StackPanel Margin="28" Spacing="16" VerticalAlignment="Center">
-        <StackPanel Spacing="4">
-            <TextBlock Text="FlashBar" FontSize="22" FontWeight="SemiBold" />
-            <TextBlock Text="Find an application to launch" Opacity="0.7" />
+    <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            CornerRadius="8">
+        <StackPanel Margin="28" Spacing="16" VerticalAlignment="Center">
+            <StackPanel Spacing="4">
+                <TextBlock Text="FlashBar" FontSize="18" FontWeight="SemiBold" />
+            </StackPanel>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     PlaceholderText="Search applications..."
+                     FontSize="18"
+                     Padding="14,12" />
         </StackPanel>
-
-        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                 PlaceholderText="Search applications..."
-                 FontSize="18"
-                 Padding="14,12" />
-    </StackPanel>
+    </Border>
 
 </Window>
