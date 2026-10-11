@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Input;
 using FlashBar.UI.ViewModels;
@@ -9,6 +10,12 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+    }
+
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+        SearchTextBox.Focus();
     }
 
     private void OnApplicationDoubleTapped(object? sender, TappedEventArgs e)
