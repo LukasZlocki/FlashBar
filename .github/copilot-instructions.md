@@ -14,10 +14,10 @@ Keep the UI layer as thin as possible. Business logic belongs in inner layers.
 
 | Layer | Responsibility | Depends on |
 |---|---|---|
-| Domain | Entities, value objects, domain rules (e.g. `Application`, `SearchQuery`, matching rules) | Nothing |
-| Repository | Repository contracts over domain types | Domain |
+| Domain | Entities, value objects, domain rules (e.g. `ApplicationEntry`, `ApplicationSearch` matching rules) | Nothing |
+| Repository | Repository and launcher contracts over domain types (`IApplicationRepository`, `IApplicationLauncher`) | Domain |
 | Service | Application use cases (e.g. search apps, launch app, handle hotkey request) | Domain, Repository |
-| Infrastructure | Repository implementations and platform adapters (app discovery, process start, global hotkey registration per OS) | Domain, Repository |
+| Infrastructure | Repository implementations and platform adapters (JSON app config, process start, global hotkey registration per OS) | Domain, Repository |
 | `FlashBar.UI` | Avalonia views, view models, entry point, and composition root | Service, Infrastructure |
 
 Rules:
@@ -61,5 +61,4 @@ src/
 
 ## Open Questions
 - Linux hotkey strategy (X11 vs Wayland, desktop environment specifics).
-- Application discovery source per OS (Start Menu / .desktop files / PATH).
-- Matching algorithm for app names (prefix, fuzzy, or both).
+- Application discovery source per OS (Start Menu / .desktop files / PATH). Currently a JSON config file (`apps.json`) is used on all platforms; automatic discovery is not implemented.

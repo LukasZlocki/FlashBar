@@ -4,8 +4,27 @@ FlashBar is a lightweight desktop launcher for Windows and Linux. Press `Win + S
 
 ## Features
 - Global hotkey (`Win + Space`) to show the search bar
-- Application search by name
-- Launch the selected application with a single confirmation
+- Application search by name (prefix matches first, case-insensitive)
+- Applications are configured in a JSON file (`apps.json`) next to the executable
+- Launch the selected application with Enter or a double-click
+
+## Configuring applications
+Edit `apps.json` (copied next to `FlashBar.UI.exe` at build time):
+
+```json
+{
+  "applications": [
+    { "name": "Notepad", "path": "C:\\Windows\\System32\\notepad.exe", "icon": "icons\\notepad.png" },
+    { "name": "Calculator", "path": "C:\\Windows\\System32\\calc.exe" }
+  ]
+}
+```
+
+- `name` (required): label shown in the list and used for search.
+- `path` (required): absolute path to the executable or document to launch.
+- `icon` (optional): image file shown next to the name. Relative paths are resolved from the folder containing `apps.json`. If omitted, the first letter of the name is shown instead.
+
+The file is re-read on every search, so changes apply without restarting FlashBar. A missing file shows an empty list.
 
 ## Technology
 - UI: [Avalonia](https://avaloniaui.net/) (desktop)
@@ -16,10 +35,10 @@ FlashBar is a lightweight desktop launcher for Windows and Linux. Press `Win + S
 ## Architecture
 FlashBar follows Clean Architecture to keep the UI layer thin:
 
-- `FlashBar.Domain`: entities, value objects, and matching rules
-- `FlashBar.Repository`: repository contracts over domain types
+- `FlashBar.Domain`: entities (`ApplicationEntry`) and matching rules (`ApplicationSearch`)
+- `FlashBar.Repository`: repository and launcher contracts over domain types
 - `FlashBar.Service`: application use cases that use repository contracts
-- `FlashBar.Infrastructure`: repository implementations, application discovery, process launching, and platform-specific hotkey registration
+- `FlashBar.Infrastructure`: JSON configuration repository, process launching, and platform-specific hotkey registration
 - `FlashBar.UI`: Avalonia views, view models, and desktop entry point; composition root belongs here
 
 ## Status
