@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FlashBar.Domain\FlashBar.Domain.csproj" />
     <ProjectReference Include="..\FlashBar.Repository\FlashBar.Repository.csproj" />
+    <ProjectReference Include="..\FlashBar.Service\FlashBar.Service.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

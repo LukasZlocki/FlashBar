@@ -64,4 +64,31 @@ public class JsonApplicationRepositoryTests : IDisposable
 
         Assert.Empty(await new JsonApplicationRepository(path).GetAllAsync());
     }
+
+    [Fact]
+    public async Task MissingUserConfig_LoadsBundledDefaultsAndAddsDiscoveredApplication()
+    {
+        var defaultsPath = WriteConfig("""{ "applications": [ { "name": "Notepad", "path": "notepad.exe" } ] }""");
+        var userConfigPath = Path.Combine(_directory, "user", "apps.json");
+        var repository = new JsonApplicationRepository(userConfigPath, defaultsPath);
+
+        await repository.AddAsync(new FlashBar.Domain.ApplicationEntry("Code", "code.exe"));
+
+        var apps = await repository.GetAllAsync();
+        Assert.Equal(["Notepad", "Code"], apps.Select(application => application.Name));
+        Assert.True(File.Exists(userConfigPath));
+    }
+
+    [Fact]
+    public async Task AddAsync_DoesNotDuplicateAnExistingApplicationPath()
+    {
+        var path = WriteConfig("""{ "applications": [ { "name": "Notepad", "path": "notepad.exe" } ] }""");
+        var repository = new JsonApplicationRepository(path);
+
+        await repository.AddAsync(new FlashBar.Domain.ApplicationEntry("Notepad Copy", "notepad.exe"));
+
+        var apps = await repository.GetAllAsync();
+        Assert.Single(apps);
+        Assert.Equal("Notepad", apps[0].Name);
+    }
 }
