@@ -67,6 +67,10 @@
                        IsVisible="{Binding HasStatus}"
                        Foreground="IndianRed"
                        TextWrapping="Wrap" />
+            <TextBlock x:Name="SearchingStatusText"
+                       Text="Searching app folder."
+                       IsVisible="{Binding IsSearching}"
+                       TextWrapping="Wrap" />
         </StackPanel>
     </Border>
 

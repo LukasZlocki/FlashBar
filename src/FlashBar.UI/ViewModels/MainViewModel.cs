@@ -33,6 +33,9 @@ public partial class MainViewModel : ViewModelBase
     public partial string? StatusMessage { get; set; }
 
     [ObservableProperty]
+    public partial bool IsSearching { get; set; }
+
+    [ObservableProperty]
     public partial string SearchText { get; set; } = string.Empty;
 
     public bool HasApplications => Applications.Count > 0;
@@ -45,13 +48,24 @@ public partial class MainViewModel : ViewModelBase
     {
         _searchCancellation?.Cancel();
         var cancellation = _searchCancellation = new CancellationTokenSource();
+        Applications.Clear();
+        SelectedApplication = null;
+        StatusMessage = null;
+        IsSearching = false;
+        OnPropertyChanged(nameof(HasApplications));
 
         try
         {
-            var results = await _searchService.SearchAsync(SearchText, cancellation.Token);
+            var results = await _searchService.SearchAsync(
+                SearchText,
+                cancellation.Token,
+                () => IsSearching = true);
             cancellation.Token.ThrowIfCancellationRequested();
+            if (_searchCancellation != cancellation)
+            {
+                return;
+            }
 
-            Applications.Clear();
             foreach (var application in results)
             {
                 Applications.Add(new ApplicationItemViewModel(application));
@@ -65,12 +79,24 @@ public partial class MainViewModel : ViewModelBase
         }
         catch (Exception exception)
         {
-            Applications.Clear();
-            SelectedApplication = null;
-            StatusMessage = $"Could not load applications: {exception.Message}";
+            if (_searchCancellation == cancellation)
+            {
+                Applications.Clear();
+                SelectedApplication = null;
+                StatusMessage = $"Could not load applications: {exception.Message}";
+            }
         }
+        finally
+        {
+            if (_searchCancellation == cancellation)
+            {
+                IsSearching = false;
+                _searchCancellation = null;
+            }
 
-        OnPropertyChanged(nameof(HasApplications));
+            cancellation.Dispose();
+            OnPropertyChanged(nameof(HasApplications));
+        }
     }
 
     [RelayCommand]
@@ -93,6 +119,10 @@ public partial class MainViewModel : ViewModelBase
             await _launchService.LaunchAsync(application.Application);
             StatusMessage = null;
             LaunchSucceeded?.Invoke(this, EventArgs.Empty);
+        }
+        catch (ApplicationPersistenceException exception)
+        {
+            StatusMessage = $"Started {application.Name}, but could not save it: {exception.InnerException?.Message ?? exception.Message}";
         }
         catch (Exception exception)
         {
