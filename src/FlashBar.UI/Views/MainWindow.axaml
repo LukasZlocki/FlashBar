@@ -31,7 +31,8 @@
             <StackPanel Spacing="4">
                 <TextBlock Text="FlashBar" FontSize="18" FontWeight="SemiBold" />
             </StackPanel>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox x:Name="SearchTextBox"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      PlaceholderText="Search applications..."
                      FontSize="18"
                      Padding="14,12" />
