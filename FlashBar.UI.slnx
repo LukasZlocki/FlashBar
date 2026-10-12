@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="src/FlashBar.Domain/FlashBar.Domain.csproj" />
+  <Project Path="src/FlashBar.Infrastructure/FlashBar.Infrastructure.csproj" />
+  <Project Path="src/FlashBar.Repository/FlashBar.Repository.csproj" />
+  <Project Path="src/FlashBar.Service/FlashBar.Service.csproj" />
+  <Project Path="src/FlashBar.Tests/FlashBar.Tests.csproj" />
+  <Project Path="src/FlashBar.UI/FlashBar.UI.csproj" />
+</Solution>
