@@ -2,11 +2,8 @@
   "applications": [
     {
       "name": "Notepad",
-      "path": "C:\\Windows\\System32\\notepad.exe"
-    },
-    {
-      "name": "Calculator",
-      "path": "C:\\Windows\\System32\\calc.exe"
+      "path": "C:\\Windows\\System32\\notepad.exe",
+      "icon": "icons\\notepad.png"
     }
   ]
 }
