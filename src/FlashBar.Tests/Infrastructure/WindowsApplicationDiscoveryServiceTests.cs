@@ -11,7 +11,7 @@ public class WindowsApplicationDiscoveryServiceTests : IDisposable
     public void Dispose() => Directory.Delete(_directory, recursive: true);
 
     [Fact]
-    public async Task SearchAsync_FindsMatchingExecutablesRecursively()
+    public async Task SearchAsync_FindsMatchingStartMenuShortcutsRecursively()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -20,6 +20,8 @@ public class WindowsApplicationDiscoveryServiceTests : IDisposable
 
         var nestedDirectory = Path.Combine(_directory, "Vendor", "Product");
         Directory.CreateDirectory(nestedDirectory);
+        var shortcutPath = Path.Combine(nestedDirectory, "ExampleEditor.lnk");
+        File.WriteAllText(shortcutPath, string.Empty);
         File.WriteAllText(Path.Combine(nestedDirectory, "ExampleEditor.exe"), string.Empty);
         File.WriteAllText(Path.Combine(nestedDirectory, "readme.txt"), string.Empty);
 
@@ -29,6 +31,7 @@ public class WindowsApplicationDiscoveryServiceTests : IDisposable
 
         var application = Assert.Single(results);
         Assert.Equal("ExampleEditor", application.Name);
-        Assert.Equal(Path.Combine(nestedDirectory, "ExampleEditor.exe"), application.ExecutablePath);
+        Assert.Equal(shortcutPath, application.ExecutablePath);
+        Assert.True(application.IconPath is null || File.Exists(application.IconPath));
     }
 }

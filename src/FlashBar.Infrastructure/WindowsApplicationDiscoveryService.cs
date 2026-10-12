@@ -10,7 +10,7 @@ public sealed class WindowsApplicationDiscoveryService : IApplicationDiscoverySe
 
     public WindowsApplicationDiscoveryService(IEnumerable<string>? searchRoots = null)
     {
-        _searchRoots = (searchRoots ?? GetSearchRoots()).ToArray();
+        _searchRoots = (searchRoots ?? GetStartMenuRoots()).ToArray();
     }
 
     public Task<IReadOnlyList<ApplicationEntry>> SearchAsync(string query, CancellationToken cancellationToken = default)
@@ -41,13 +41,14 @@ public sealed class WindowsApplicationDiscoveryService : IApplicationDiscoverySe
                 continue;
             }
 
-            foreach (var executablePath in Directory.EnumerateFiles(root, "*.exe", options))
+            foreach (var shortcutPath in Directory.EnumerateFiles(root, "*.lnk", options))
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var name = Path.GetFileNameWithoutExtension(executablePath);
+                var name = Path.GetFileNameWithoutExtension(shortcutPath);
                 if (name.Contains(query, StringComparison.OrdinalIgnoreCase))
                 {
-                    results.TryAdd(executablePath, new ApplicationEntry(name, executablePath));
+                    var iconPath = WindowsShortcutIconCache.GetIconPath(shortcutPath);
+                    results.TryAdd(shortcutPath, new ApplicationEntry(name, shortcutPath, iconPath));
                 }
             }
         }
@@ -61,13 +62,12 @@ public sealed class WindowsApplicationDiscoveryService : IApplicationDiscoverySe
             .ThenBy(application => application.Name, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-    private static IReadOnlyList<string> GetSearchRoots()
+    private static IReadOnlyList<string> GetStartMenuRoots()
     {
         var roots = new[]
         {
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs"),
+            Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu),
         };
 
         return roots
