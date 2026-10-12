@@ -21,13 +21,8 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var settingsPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "FlashBar",
-                "apps.json");
-            var repository = new JsonApplicationRepository(
-                settingsPath,
-                Path.Combine(AppContext.BaseDirectory, "apps.json"));
+            var appsPath = Path.Combine(AppContext.BaseDirectory, "apps.json");
+            var repository = new JsonApplicationRepository(appsPath);
             var viewModel = new MainViewModel(
                 new ApplicationSearchService(repository, new WindowsApplicationDiscoveryService()),
                 new ApplicationLaunchService(new ProcessApplicationLauncher(), repository));
