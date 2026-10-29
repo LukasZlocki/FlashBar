@@ -15,7 +15,7 @@ public sealed class WindowsApplicationDiscoveryService : IApplicationDiscoverySe
 
     public Task<IReadOnlyList<ApplicationEntry>> SearchAsync(string query, CancellationToken cancellationToken = default)
     {
-        if (!OperatingSystem.IsWindows() || string.IsNullOrWhiteSpace(query))
+        if (string.IsNullOrWhiteSpace(query))
         {
             return Task.FromResult<IReadOnlyList<ApplicationEntry>>([]);
         }

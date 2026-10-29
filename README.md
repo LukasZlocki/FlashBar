@@ -1,6 +1,6 @@
 # FlashBar
 
-FlashBar is a lightweight desktop launcher for Windows and Linux. Press `Win + Space` to open a search bar, type the name of an application, and confirm to launch it.
+FlashBar is a lightweight desktop launcher for Windows. Press `Win + Space` to open a search bar, type the name of an application, and confirm to launch it.
 
 ## Features
 - Global hotkey (`Win + Space`) to show the search bar
@@ -29,8 +29,8 @@ The file is re-read on every search, so changes apply without restarting FlashBa
 ## Technology
 - UI: [Avalonia](https://avaloniaui.net/) (desktop)
 - Runtime: C# on .NET 10
-- Platforms: Windows and Linux
-- Distribution: Native AOT (`PublishAot=true`)
+- Platform: Windows
+- Distribution: Native AOT (`PublishAot=true`), `win-x64`
 
 ## Architecture
 FlashBar follows Clean Architecture to keep the UI layer thin:

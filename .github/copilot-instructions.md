@@ -4,10 +4,10 @@
 FlashBar is a desktop launcher. Pressing `Win + Space` shows a search bar. Typing an application name and confirming runs that application.
 
 ## Technology Stack
-- UI: Avalonia (desktop)
+- UI: Avalonia (desktop, Win32 backend with Skia rendering)
 - Language/runtime: C# on .NET 10
-- Targets: Windows and Linux
-- Distribution: Native AOT publish (`PublishAot=true`) for both platforms
+- Target: Windows x64
+- Distribution: Native AOT publish (`PublishAot=true`)
 
 ## Architecture: Clean Architecture
 Keep the UI layer as thin as possible. Business logic belongs in inner layers.
@@ -17,7 +17,7 @@ Keep the UI layer as thin as possible. Business logic belongs in inner layers.
 | Domain | Entities, value objects, domain rules (e.g. `ApplicationEntry`, `ApplicationSearch` matching rules) | Nothing |
 | Repository | Repository and launcher contracts over domain types (`IApplicationRepository`, `IApplicationLauncher`) | Domain |
 | Service | Application use cases (e.g. search apps, launch app, handle hotkey request) | Domain, Repository |
-| Infrastructure | Repository implementations and platform adapters (JSON app config, process start, global hotkey registration per OS) | Domain, Repository |
+| Infrastructure | Repository implementations and platform adapters (JSON app config, process start, global hotkey registration on Windows) | Domain, Repository |
 | `FlashBar.UI` | Avalonia views, view models, entry point, and composition root | Service, Infrastructure |
 
 Rules:
@@ -42,7 +42,7 @@ src/
 - Avoid runtime reflection, `Activator.CreateInstance` on dynamic types, and dynamic code generation.
 - Prefer source generators and compiled bindings (Avalonia `x:DataType`).
 - Mark JSON serialization with source-generated contexts (`JsonSerializerContext`).
-- Keep trimming warnings at zero. Verify with `dotnet publish -r win-x64 -p:PublishAot=true` and `dotnet publish -r linux-x64 -p:PublishAot=true`.
+- Keep trimming warnings at zero. Verify with `dotnet publish -r win-x64 -p:PublishAot=true`.
 - Avoid libraries that are not AOT-compatible.
 
 ## Coding Conventions
@@ -60,5 +60,5 @@ src/
 - Update `.github/copilot-instructions.md` when architecture decisions change.
 
 ## Open Questions
-- Linux hotkey strategy (X11 vs Wayland, desktop environment specifics).
-- Application discovery source per OS (Start Menu / .desktop files / PATH). Currently a JSON config file (`apps.json`) is used on all platforms; automatic discovery is not implemented.
+- Global hotkey (`Win + Space`) implementation on Windows (not yet implemented).
+- Automatic application discovery beyond Start Menu shortcuts. Currently a JSON config file (`apps.json`) is used; Start Menu `.lnk` search is implemented in `WindowsApplicationDiscoveryService`.

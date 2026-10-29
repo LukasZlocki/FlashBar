@@ -13,11 +13,6 @@ public class WindowsApplicationDiscoveryServiceTests : IDisposable
     [Fact]
     public async Task SearchAsync_FindsMatchingStartMenuShortcutsRecursively()
     {
-        if (!OperatingSystem.IsWindows())
-        {
-            return;
-        }
-
         var nestedDirectory = Path.Combine(_directory, "Vendor", "Product");
         Directory.CreateDirectory(nestedDirectory);
         var shortcutPath = Path.Combine(nestedDirectory, "ExampleEditor.lnk");
