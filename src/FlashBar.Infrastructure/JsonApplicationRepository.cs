@@ -121,7 +121,7 @@ public sealed class JsonApplicationRepository(string configPath, string? default
         => string.Equals(
             Path.GetFullPath(first),
             Path.GetFullPath(second),
-            OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
+            StringComparison.OrdinalIgnoreCase);
 
     private static string? ResolveIconPath(string? icon, string configDirectory)
         => string.IsNullOrWhiteSpace(icon)

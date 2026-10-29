@@ -18,7 +18,7 @@ public sealed class ProcessApplicationLauncher : IApplicationLauncher
 
         var startInfo = new ProcessStartInfo(executablePath)
         {
-            UseShellExecute = OperatingSystem.IsWindows(),
+            UseShellExecute = true,
             WorkingDirectory = Path.GetDirectoryName(executablePath)!,
         };
 

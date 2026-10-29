@@ -12,11 +12,6 @@ internal static class WindowsShortcutIconCache
 
     public static string? GetIconPath(string shortcutPath)
     {
-        if (!OperatingSystem.IsWindows())
-        {
-            return null;
-        }
-
         string? temporaryPath = null;
         try
         {
